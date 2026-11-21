@@ -44,3 +44,14 @@ pg_restore -d "$DATABASE_URL" --clean --if-exists wasitak_YYYY-MM-DD.dump   # ا
 
 ## وسيطك الذكي (غير مفعل)
 الوحدة `smart_wasitak` معطلة و`readiness=db_ready`. المزودون الخارجيون معطلون ولا يمكن تفعيل مدفوع دون تسجيل موافقتك الصريحة (قيد في القاعدة). المزود `local_rules` مجاني بلا ذكاء اصطناعي.
+
+## تشغيل طبقة التطبيق محلياً (محدّث 2026-11-21)
+```
+pg_ctlcluster 16 main start
+db/rebuild_test_db.sh wasitak_demo
+cd app && node_modules/.bin/tsx scripts/build-ui.ts
+ALLOW_DEMO_SEED=1 WASITAK_LOCAL_DRIVER=1 DATABASE_URL=... node_modules/.bin/tsx scripts/seed-demo.ts
+WASITAK_LOCAL_DRIVER=1 PORT=3100 node_modules/.bin/tsx scripts/dev-server.ts
+```
+حسابات العرض (كلمة المرور Demo#12345): مدير +967770000001، تاجر ...02، مشتري ...03، مندوب ...04. لإنشاء مدير حقيقي: `scripts/create-admin.ts`.
+الإنتاج: متغيرات DATABASE_URL (Neon) وBLOB_READ_WRITE_TOKEN؛ لا تُرفع بيانات العرض لقاعدة الإنتاج. لا تُكتب أسرار في المحادثة.

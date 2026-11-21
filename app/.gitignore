@@ -1,0 +1,5 @@
+node_modules
+.uploads/
+e2e-shots/
+public/app.js
+public/app.css

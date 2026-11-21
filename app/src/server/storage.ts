@@ -21,6 +21,11 @@ export async function saveImage(buf: Buffer, name: string): Promise<string> {
     out = await sharp(buf).rotate().resize({ width: 1400, height: 1400, fit: 'inside', withoutEnlargement: true }).webp({ quality: 82 }).toBuffer();
     ext = 'webp';
   } catch { /* sharp غير متوفر: نحفظ الأصل بعد التحقق من نوعه */ }
+  if (process.env.BLOB_READ_WRITE_TOKEN) {   // Vercel Blob (خطة Hobby المجانية): غير مختبر محلياً، يُتحقق منه عند النشر
+    const { put } = await import('@vercel/blob' as string);
+    const r = await put(`products/${name}.${ext}`, out, { access: 'public', contentType: ext === 'webp' ? 'image/webp' : ext === 'png' ? 'image/png' : 'image/jpeg', addRandomSuffix: false });
+    return r.url as string;
+  }
   await fs.mkdir(UPLOAD_DIR, { recursive: true });
   await fs.writeFile(path.join(UPLOAD_DIR, `${name}.${ext}`), out);
   return `/uploads/${name}.${ext}`;

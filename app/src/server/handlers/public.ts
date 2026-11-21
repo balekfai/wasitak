@@ -139,3 +139,6 @@ route('GET', '/public/delivery-fee', 'none', async (c) => {
       WHERE z.is_active AND z.governorate_id = $1 AND (z.area_id IS NULL OR z.area_id::text = $2) ORDER BY (z.area_id IS NOT NULL) DESC LIMIT 1`, [g, a])).rows[0];
   return { fee: r ? r.fee : '0', currency: r ? r.currency : 'YER', configured: !!r };
 });
+
+route('GET', '/public/currencies', 'none', async (c) =>
+  ({ currencies: (await c.db.query('SELECT code, name_ar, symbol, is_base FROM currencies WHERE is_active ORDER BY is_base DESC, code')).rows }));
