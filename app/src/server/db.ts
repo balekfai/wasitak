@@ -1,5 +1,5 @@
 // واجهة قاعدة بيانات موحدة. الإنتاج: حزمة `pg` (Neon). التطوير المحلي بلا إنترنت: مشغّل pgwire.
-import { Conn, type QueryResult, type Row } from './pgwire';
+import { Conn, type QueryResult, type Row } from './pgwire.js';
 
 export interface Tx { query<T = Row>(sql: string, params?: any[]): Promise<QueryResult<T>> }
 export interface Db extends Tx {
