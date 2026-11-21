@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { route, HttpError, bad, notFound, forbidden, hashPassword, normalizePhone, type Ctx } from '../core';
+import { route, HttpError, bad, notFound, forbidden, hashPassword, normalizePhone, type Ctx } from '../core.js';
 
 const A = { perm: 'admin.access' };
 const uuid = z.string().uuid();
@@ -200,7 +200,7 @@ route('GET', '/admin/users', { perm: 'users.manage' }, async (c) => {
     roles: (await c.db.query(`SELECT code, name_ar FROM roles WHERE code NOT IN ('buyer','merchant') ORDER BY name_ar`)).rows };
 });
 route('POST', '/admin/users', { perm: 'users.manage' }, async (c) => {
-  const b = z.object({ role: z.string(), full_name: z.string().trim().min(2).max(100), phone: z.string().transform(normalizePhone).refine(p => /^\+?[0-9]{7,15}$/.test(p)), password: z.string().min(8).max(200) }).parse(c.body);
+  const b = z.object({ role: z.string(), full_name: z.string().trim().min(2).max(100), phone: z.string().transform(normalizePhone).refine((p: string) => /^\+?[0-9]{7,15}$/.test(p)), password: z.string().min(8).max(200) }).parse(c.body);
   if (['buyer', 'merchant'].includes(b.role)) throw bad('المشترون والتجار يسجلون بأنفسهم');
   if (['super_admin', 'admin_staff'].includes(b.role) && !(await c.perm('roles.manage'))) throw forbidden('إنشاء المدراء يتطلب صلاحية إدارة الأدوار');
   const hash = await hashPassword(b.password);
