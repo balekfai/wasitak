@@ -1,7 +1,7 @@
 import { z } from 'zod';
-import { route, json, bad, notFound, HttpError, hashPassword, verifyPassword, normalizePhone, createSession, sessionCookie, revokeSession, rateLimit, type Ctx } from '../core';
+import { route, json, bad, notFound, HttpError, hashPassword, verifyPassword, normalizePhone, createSession, sessionCookie, revokeSession, rateLimit, type Ctx } from '../core.js';
 
-const phoneZ = z.string().transform(normalizePhone).refine(p => /^\+?[0-9]{7,15}$/.test(p), 'رقم الهاتف غير صحيح');
+const phoneZ = z.string().transform(normalizePhone).refine((p: string) => /^\+?[0-9]{7,15}$/.test(p), 'رقم الهاتف غير صحيح');
 const pwZ = z.string().min(8, 'كلمة المرور 8 أحرف على الأقل').max(200);
 
 // ================= المصادقة =================
