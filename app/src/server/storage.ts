@@ -1,7 +1,7 @@
 // تخزين الصور. محلياً: مجلد uploads. في Vercel: يُستبدل بـ @vercel/blob (put) دون تغيير واجهة saveImage.
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import { HttpError } from './core';
+import { HttpError } from './core.js';
 
 export const UPLOAD_DIR = process.env.UPLOAD_DIR || path.resolve(process.cwd(), '.uploads');
 
