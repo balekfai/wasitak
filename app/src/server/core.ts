@@ -1,7 +1,7 @@
 // نواة الخادم: أخطاء، مصادقة، جلسات، موجّه. كل المعالجات بمعيار Web (Request → Response)
 // وهو نفس توقيع Route Handlers في Next.js، فيُربط لاحقاً بمسار catch-all واحد دون إعادة كتابة.
 import crypto from 'node:crypto';
-import { getDb, type Db, type Tx } from './db';
+import { getDb, type Db, type Tx } from './db.js';
 
 export class HttpError extends Error {
   constructor(public status: number, message: string, public extra?: any) { super(message); }
