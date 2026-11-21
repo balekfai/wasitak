@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import crypto from 'node:crypto';
-import { route, HttpError, bad, notFound, type Ctx } from '../core';
-import { saveImage } from '../storage';
+import { route, HttpError, bad, notFound, type Ctx } from '../core.js';
+import { saveImage } from '../storage.js';
 
 async function me(c: Ctx) {
   const m = (await c.db.query('SELECT id, shop_name, status, rejection_reason, default_currency FROM merchants WHERE user_id = $1', [c.user!.id])).rows[0];
