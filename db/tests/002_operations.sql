@@ -20,7 +20,7 @@ INSERT INTO products(merchant_id, category_id, name_ar, merchant_price, currency
 INSERT INTO product_variants(product_id, options) SELECT id,'{}' FROM products;
 INSERT INTO inventory(variant_id, quantity) SELECT id, 10 FROM product_variants;
 SELECT approve_product((SELECT id FROM products), (SELECT id FROM users WHERE role_id=(SELECT id FROM roles WHERE code='merchant'))) WHERE false;
-UPDATE products SET status='approved', final_price=1200 ;  -- تجهيز مباشر للاختبار
+UPDATE products SET status='approved', final_price=1200, priced_merchant_price=1000, priced_currency='YER', markup_percent=20, markup_amount=200;  -- تجهيز مباشر للاختبار
 -- يحتاج صلاحية؟ لا: هذا تحديث مباشر داخل بيئة الاختبار فقط
 INSERT INTO exchange_rates(from_currency,to_currency,rate) VALUES ('SAR','YER',140);
 
