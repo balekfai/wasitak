@@ -1,10 +1,8 @@
 {
-  "buildCommand": "npm run build:ui",
+  "buildCommand": "npm run build",
   "outputDirectory": "public",
   "rewrites": [
-    { "source": "/api/:path*", "destination": "/api" },
-    { "source": "/((?!api/|.*\\..*).*)", "destination": "/index.html" }
-  ],
-  "headers": [{ "source": "/(.*)", "headers": [
-    { "key": "X-Content-Type-Options", "value": "nosniff" }, { "key": "X-Frame-Options", "value": "DENY" }, { "key": "Referrer-Policy", "value": "same-origin" } ] }]
+    { "source": "/api/(.*)", "destination": "/api/index.js" },
+    { "source": "/((?!api/|assets/|icon\\.svg|manifest\\.webmanifest|sw\\.js).*)", "destination": "/index.html" }
+  ]
 }
