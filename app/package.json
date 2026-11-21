@@ -3,10 +3,11 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "build": "tsx scripts/build-ui.ts && esbuild api/index.ts --bundle --platform=node --format=esm --outfile=api/index.js --external:pg-native --external:sharp",
     "build:ui": "tsx scripts/build-ui.ts",
     "dev:local": "WASITAK_LOCAL_DRIVER=1 tsx scripts/dev-server.ts",
     "test": "WASITAK_LOCAL_DRIVER=1 tsx --test tests/*.test.ts"
   },
   "dependencies": { "@vercel/blob": "^0.27.0", "pg": "^8.13.0", "zod": "^3.23.0", "react": "^19.0.0", "react-dom": "^19.0.0", "sharp": "^0.33.0" },
-  "devDependencies": { "typescript": "^5.6.0", "tsx": "^4.19.0", "esbuild": "^0.24.0", "@types/react": "^19.0.0", "@types/react-dom": "^19.0.0", "@types/node": "^22.0.0", "@types/pg": "^8.11.0" }
+  "devDependencies": { "typescript": "^5.6.0", "tsx": "^4.19.0", "esbuild": "^0.24.0", "@types/react": "^19.0.0", "@types/react-dom": "^19.0.0", "@types/node": "^22.0.0" }
 }
