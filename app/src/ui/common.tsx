@@ -105,12 +105,27 @@ export const Stat = ({ v, l }: { v: React.ReactNode; l: string }) => <div classN
 export function Img({ src, alt }: { src?: string | null; alt: string }) { return src ? <img src={src} alt={alt} loading="lazy" /> : <span aria-hidden>🛍️</span>; }
 export const Stars = ({ v }: { v: any }) => v ? <span className="stars" aria-label={`التقييم ${v} من 5`}>{'★'.repeat(Math.round(Number(v)))}{'☆'.repeat(5 - Math.round(Number(v)))} <span className="muted">{v}</span></span> : null;
 
-export async function uploadImage(file: File): Promise<string> {
-  if (file.size > 12 * 1024 * 1024) throw new Error('الصورة كبيرة جداً');
-  const r = await api<{ url: string }>('/merchant/uploads', { raw: file, method: 'POST' });
-  return r.url;
+async function shrink(file: File): Promise<Blob> {
+  if (file.size < 1_500_000) return file;
+  try {
+    const url = URL.createObjectURL(file);
+    const img = await new Promise<HTMLImageElement>((ok, no) => { const i = new Image(); i.onload = () => ok(i); i.onerror = () => no(new Error('img')); i.src = url; });
+    URL.revokeObjectURL(url);
+    const k = Math.min(1, 1600 / Math.max(img.naturalWidth, img.naturalHeight));
+    const c = document.createElement('canvas');
+    c.width = Math.round(img.naturalWidth * k); c.height = Math.round(img.naturalHeight * k);
+    c.getContext('2d')!.drawImage(img, 0, 0, c.width, c.height);
+    const b = await new Promise<Blob | null>(r => c.toBlob(r, 'image/jpeg', 0.85));
+    return b && b.size < file.size ? b : file;
+  } catch { return file; }
 }
-
+export async function uploadImage(file: File): Promise<string> {
+  if (file.size > 25 * 1024 * 1024) throw new Error('الصورة كبيرة جداً');
+  const body = await shrink(file);
+  if (body.size > 4_000_000) throw new Error('الصورة كبيرة، اختر صورة أصغر');
+  const r = await api<{ url: string }>('/merchant/uploads', { raw: body, method: 'POST' });
+  return r.url;
+  }
 // ================= السلة (localStorage مع تحقق كامل من الخادم عند الطلب) =================
 export interface CartLine { variant_id: string; product_id: string; name: string; options: string; price: number; currency: string; image?: string | null; qty: number; max: number }
 const CartCtx = createContext<{ lines: CartLine[]; add: (l: CartLine) => void; setQty: (id: string, q: number) => void; remove: (id: string) => void; clear: () => void; count: number; total: number }>(null as any);
