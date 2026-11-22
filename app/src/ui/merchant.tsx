@@ -56,10 +56,10 @@ function CategorySelect({ value, onChange }: { value: string; onChange: (v: stri
 
 function ImagePicker({ images, setImages }: { images: string[]; setImages: (v: string[]) => void }) {
   const { run, busy } = useAction(); const ref = useRef<HTMLInputElement>(null);
-  const pick = async (files: FileList | null) => { if (!files) return; for (const f of Array.from(files).slice(0, 8 - images.length)) { const u = await run(() => uploadImage(f)); if (u) setImages([...images, u].slice(0, 8)); } };
+    const pick = async (files: FileList | null) => { if (!files) return; let cur = images; for (const f of Array.from(files).slice(0, 8 - images.length)) { const u = await run(() => uploadImage(f)); if (u) { cur = [...cur, u].slice(0, 8); setImages(cur); } } };
   return <div className="imgs">{images.map((u, i) => <div key={u} className="im"><img src={u} alt={`صورة ${i + 1}`} /><button type="button" aria-label="حذف" onClick={() => setImages(images.filter(x => x !== u))}>✕</button></div>)}
     {images.length < 8 && <button type="button" className="upl" disabled={busy} onClick={() => ref.current?.click()} aria-label="رفع صورة">{busy ? '…' : '＋'}</button>}
-    <input ref={ref} type="file" accept="image/jpeg,image/png,image/webp" capture="environment" multiple hidden onChange={e => { pick(e.target.files); e.target.value = ''; }} /></div>;
+    <input ref={ref} type="file" accept="image/jpeg,image/png,image/webp"  multiple hidden onChange={e => { pick(e.target.files); e.target.value = ''; }} /></div>;
 }
 
 function ProductForm({ id }: { id?: string }) {
