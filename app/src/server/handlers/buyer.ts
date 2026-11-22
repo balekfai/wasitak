@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { route, notFound, forbidden, bad, type Ctx } from '../core';
+import { route, notFound, forbidden, bad, type Ctx } from '../core.js';
 
 const orderZ = z.object({
   items: z.array(z.object({ variant_id: z.string().uuid(), qty: z.number().int().min(1).max(99) })).min(1).max(50),

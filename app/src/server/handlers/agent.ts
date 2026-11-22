@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { route, bad, notFound, type Ctx } from '../core';
+import { route, bad, notFound, type Ctx } from '../core.js';
 
 const R = { roles: ['delivery_agent'] };
 async function agentId(c: Ctx) {
