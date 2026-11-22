@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "tsx scripts/build-ui.ts && esbuild api/index.ts --bundle --platform=node --format=esm --outfile=api/handler.js --external:pg-native --external:sharp --banner:js=\"import { createRequire } from 'module'; const require = createRequire(import.meta.url);\"",
+    "build": "tsx scripts/build-ui.ts",
     "build:ui": "tsx scripts/build-ui.ts",
     "dev:local": "WASITAK_LOCAL_DRIVER=1 tsx scripts/dev-server.ts",
     "test": "WASITAK_LOCAL_DRIVER=1 tsx --test tests/*.test.ts"
