@@ -32,11 +32,16 @@ route('POST', '/auth/register', 'none', async (c) => {
 });
 
 route('POST', '/auth/login', 'none', async (c) => {
-  const { phone, password } = z.object({ phone: phoneZ, password: z.string().min(1).max(200) }).parse(c.body);
+  const { identifier, password } = z.object({ identifier: z.string().trim().min(1).max(320), password: z.string().min(1).max(200) }).parse(c.body);
   rateLimit('login:' + c.ip, 20, 600_000);
+  const isEmail = identifier.includes('@');
+  const phone = isEmail ? null : phoneZ.parse(identifier);
+  const email = isEmail ? z.string().email('البريد الإلكتروني غير صحيح').parse(identifier).toLowerCase() : null;
   const u = (await c.db.query(`SELECT u.id, u.password_hash, u.status, u.failed_logins, u.locked_until, r.code AS role
-      FROM users u JOIN roles r ON r.id = u.role_id WHERE u.phone = $1`, [phone])).rows[0];
-  const fail = () => new HttpError(401, 'رقم الهاتف أو كلمة المرور غير صحيحة');
+      FROM users u JOIN roles r ON r.id = u.role_id
+      WHERE u.phone = $1 OR (u.email = $2 AND r.code IN ('super_admin','admin_staff','product_reviewer','order_staff','accountant','support_staff'))`,
+    [phone, email])).rows[0];
+  const fail = () => new HttpError(401, 'بيانات الدخول غير صحيحة');
   if (!u) { await verifyPassword(password, 'scrypt$16384$8$1$AAAAAAAAAAAAAAAAAAAAAA==$AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA='); throw fail(); }
   if (u.locked_until && new Date(u.locked_until) > new Date()) throw new HttpError(423, 'الحساب مقفل مؤقتاً بسبب محاولات خاطئة، حاول لاحقاً');
   if (!(await verifyPassword(password, u.password_hash))) {
