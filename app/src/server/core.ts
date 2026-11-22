@@ -96,9 +96,9 @@ export function rateLimit(key: string, max: number, windowMs: number) {
 
 const PG_USER_ERRORS = new Set(['P0001', '23514', '42501', '23505', '23503']);
 
-export async function dispatch(req: Request): Promise<Response> {
+export async function dispatch(req: Request, pathOverride?: string): Promise<Response> {
   const url = new URL(req.url);
-  const path = url.pathname.replace(/^\/api/, '') || '/';
+  const path = pathOverride ?? (url.pathname.replace(/^\/api/, '') || '/');
   try {
     const r = routes.find(x => x.method === req.method && x.re.test(path));
     if (!r) throw notFound('المسار غير موجود');
