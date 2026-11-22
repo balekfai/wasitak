@@ -220,10 +220,10 @@ export function Account() {
 export function AuthPage({ initial }: { initial: 'login' | 'register' }) {
   const { refresh } = useMe(); const { go, search } = useRoute(); const { run, busy } = useAction(); const govs = useFetch<any>('/public/governorates');
   const [mode, setMode] = useState<'login' | 'register'>(initial); const [role, setRole] = useState<'buyer' | 'merchant'>('buyer');
-  const [f, setF] = useState({ full_name: '', phone: '', password: '', shop_name: '', governorate_id: '', address: '' }); const upd = (k: string) => (e: any) => setF(x => ({ ...x, [k]: e.target.value }));
+  const [f, setF] = useState({ full_name: '', phone: '', identifier: '', password: '', shop_name: '', governorate_id: '', address: '' }); const upd = (k: string) => (e: any) => setF(x => ({ ...x, [k]: e.target.value }));
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const r = await run(() => mode === 'login' ? api('/auth/login', { body: { phone: f.phone, password: f.password } })
+    const r = await run(() => mode === 'login' ? api('/auth/login', { body: { identifier: f.identifier, password: f.password } })
       : api('/auth/register', { body: { role, full_name: f.full_name, phone: f.phone, password: f.password, governorate_id: f.governorate_id || undefined, ...(role === 'merchant' ? { shop_name: f.shop_name, address: f.address || undefined } : {}) } }));
     if (r) { await refresh(); const next = search.get('next'); go(next || (r.role === 'merchant' ? '/merchant' : r.role === 'buyer' ? '/' : r.role === 'delivery_agent' ? '/agent' : '/admin')); }
   };
@@ -232,7 +232,9 @@ export function AuthPage({ initial }: { initial: 'login' | 'register' }) {
       {mode === 'register' && <div className="tabs"><button type="button" className={role === 'buyer' ? 'on' : ''} onClick={() => setRole('buyer')}>أنا مشتري</button><button type="button" className={role === 'merchant' ? 'on' : ''} onClick={() => setRole('merchant')}>أنا تاجر</button></div>}
       {mode === 'register' && <Field label="الاسم الكامل"><Input required minLength={2} value={f.full_name} onChange={upd('full_name')} autoComplete="name" /></Field>}
       {mode === 'register' && role === 'merchant' && <Field label="اسم المحل"><Input required value={f.shop_name} onChange={upd('shop_name')} /></Field>}
-      <Field label="رقم الهاتف"><Input required dir="ltr" inputMode="tel" placeholder="+967…" value={f.phone} onChange={upd('phone')} autoComplete="username" /></Field>
+      {mode === 'login'
+        ? <Field label="البريد الإلكتروني أو رقم الهاتف"><Input required dir="ltr" placeholder="البريد الإلكتروني أو رقم الهاتف" value={f.identifier} onChange={upd('identifier')} autoComplete="username" /></Field>
+        : <Field label="رقم الهاتف"><Input required dir="ltr" inputMode="tel" placeholder="+967…" value={f.phone} onChange={upd('phone')} autoComplete="tel" /></Field>}
       <Field label="كلمة المرور" hint={mode === 'register' ? '8 أحرف على الأقل' : undefined}><Input required type="password" minLength={mode === 'register' ? 8 : 1} value={f.password} onChange={upd('password')} autoComplete={mode === 'login' ? 'current-password' : 'new-password'} /></Field>
       {mode === 'register' && <Field label="المحافظة"><select className="input" value={f.governorate_id} onChange={upd('governorate_id')}><option value="">اختر…</option>{govs.data?.governorates.map((g: any) => <option key={g.id} value={g.id}>{g.name_ar}</option>)}</select></Field>}
       {mode === 'register' && role === 'merchant' && <div className="alert">سيُراجع فريق وسيطك طلب انضمامك قبل تفعيل إضافة المنتجات.</div>}
