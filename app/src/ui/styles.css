@@ -119,3 +119,9 @@ table.t { width: 100%; border-collapse: collapse; min-width: 560px; } .t th, .t 
 @media (min-width: 861px) { .show-m { display: none !important; } }
 @media (max-width: 420px) { .g2 { grid-template-columns: 1fr; } }
 @media print { .side, .mtop, .topbar, .bottomnav, .btn { display: none !important; } .shell { display: block; } }
+/* ===== شريط البحث (إصلاح) ===== */
+.topbar .search { flex: 1 1 auto; display: flex; min-width: 0; }
+.topbar .search input { flex: 1; min-width: 0; min-height: 44px; border: 0; border-radius: 0 10px 10px 0; padding: 0 14px; background: #fff; color: #0f172a; font-size: 16px; }
+.topbar .search input::placeholder { color: #64748b; opacity: 1; }
+.topbar .search button { border: 0; background: var(--accent); color: #1f2937; font-weight: 800; padding: 0 18px; border-radius: 10px 0 0 10px; cursor: pointer; }
+@media (max-width: 860px) { .topbar .search { order: 3; flex: 1 1 100%; } }
