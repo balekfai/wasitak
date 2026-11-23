@@ -3,6 +3,6 @@
 import './handlers/public.js';
 import './handlers/buyer.js';
 import './handlers/merchant.js';
-import './handlers/admin.js';
+import './handlers/admin.js'; import './handlers/ads.js';
 import './handlers/agent.js';
 export { dispatch } from './core.js';
