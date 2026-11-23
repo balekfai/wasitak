@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { api, useFetch, Link, useRoute, useMe, useAction, Async, Field, Input, Img, Status, Stat, Modal, ORDER_STATUS, PRODUCT_STATUS, MERCHANT_STATUS, money, dt, match } from './common';
 import { DashShell, type NavItem } from './shell';
+import { AdminAds } from './ads';
 
 const ALL_NAV: (NavItem & { perm?: string })[] = [
   { href: '/admin', icon: '📊', label: 'لوحة المعلومات', section: 'عام' },
   { href: '/admin/orders', icon: '📦', label: 'الطلبات', perm: 'orders.view', section: 'العمليات' },
   { href: '/admin/products', icon: '🛍️', label: 'مراجعة المنتجات', perm: 'products.review', section: 'العمليات' },
   { href: '/admin/merchants', icon: '🏪', label: 'التجار', perm: 'merchants.review', section: 'العمليات' },
+  { href: '/admin/ads', icon: '📢', label: 'الإعلانات', perm: 'ads.manage', section: 'العمليات' },
   { href: '/admin/categories', icon: '🗂️', label: 'الأقسام', perm: 'categories.manage', section: 'الكتالوج' },
   { href: '/admin/pricing', icon: '🏷️', label: 'التسعير وأسعار الصرف', perm: 'pricing.manage', section: 'الكتالوج' },
   { href: '/admin/accounting', icon: '💰', label: 'المحاسبة والمستحقات', perm: 'accounting.view', section: 'المالية' },
