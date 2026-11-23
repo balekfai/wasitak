@@ -55,8 +55,7 @@ table.t { width: 100%; border-collapse: collapse; min-width: 560px; } .t th, .t 
 .topbar { background: var(--brand); color: #fff; position: sticky; top: 0; z-index: 30; }
 .topbar .wrap { display: flex; align-items: center; gap: 12px; min-height: 64px; }
 .logo { font-weight: 800; font-size: 1.45rem; color: #fff; letter-spacing: -.3px; white-space: nowrap; } .logo b { color: var(--accent); }
-.search { flex: 1; display: flex; min-width: 0; }  border-radius: 0 10px 10px 0; padding: 0 14px; } .search button { border: 0; background: var(--accent); color: #1f2937; font-weight: 800; padding: 0 16px; border-radius: 10px 0 0 10px; cursor: pointer; }
-.iconbtn { position: relative; color: #fff; display: inline-flex; align-items: center; gap: 6px; padding: 8px 10px; border-radius: 10px; font-weight: 700; } .iconbtn:hover { background: rgba(255,255,255,.14); }
+.search { flex: 1; display: flex; min-width: 0; } .search input { flex: 1; min-width: 0; border: 0; outline: 0; font: inherit; border-radius: 0 10px 10px 0; padding: 0 14px; } .search button { border: 0; background: var(--accent); color: #1f2937; font-weight: 800; padding: 0 16px; border-radius: 10px 0 0 10px; cursor: pointer; }.iconbtn { position: relative; color: #fff; display: inline-flex; align-items: center; gap: 6px; padding: 8px 10px; border-radius: 10px; font-weight: 700; } .iconbtn:hover { background: rgba(255,255,255,.14); }
 .cartbadge { position: absolute; top: -2px; left: -2px; background: var(--accent); color: #1f2937; border-radius: 999px; min-width: 20px; height: 20px; font-size: .75rem; display: grid; place-items: center; padding: 0 5px; font-weight: 800; }
 .govbar { background: var(--brand-dark); color: #d1fae5; font-size: .85rem; } .govbar .wrap { display: flex; gap: 12px; align-items: center; min-height: 36px; }
 .govbar select { background: transparent; color: #fff; border: 0; font-weight: 700; }
