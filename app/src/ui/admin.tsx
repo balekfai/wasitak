@@ -22,7 +22,7 @@ export function AdminApp() {
   if (!u?.is_staff) return <div className="auth alert warn">هذه اللوحة لحسابات الإدارة والموظفين فقط. <Link href="/login">تسجيل الدخول</Link></div>;
   const has = (p?: string) => !p || u.permissions.includes(p);
   const nav = ALL_NAV.filter(n => has(n.perm));
-  const rules: [string, React.ReactNode, string?][] = [['/admin/orders', <Orders />, 'orders.view'], ['/admin/products', <Products />, 'products.review'], ['/admin/merchants', <Merchants />, 'merchants.review'],
+  const rules: [string, React.ReactNode, string?][] = [['/admin/orders', <Orders />, 'orders.view'], ['/admin/products', <Products />, 'products.review'], ['/admin/merchants', <Merchants />, 'merchants.review'], ['/admin/ads', <AdminAds />, 'ads.manage'],
     ['/admin/categories', <Categories />, 'categories.manage'], ['/admin/pricing', <Pricing />, 'pricing.manage'], ['/admin/accounting', <Accounting />, 'accounting.view'],
     ['/admin/users', <Users />, 'users.manage'], ['/admin/modules', <Modules />, 'modules.manage'], ['/admin/audit', <Audit />, 'audit.view']];
   const hit = rules.find(r => r[0] === path);
