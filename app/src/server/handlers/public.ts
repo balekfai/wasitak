@@ -104,7 +104,7 @@ route('GET', '/public/products', 'none', async (c) => {
     where.push(`category_id IN (WITH RECURSIVE t AS (SELECT id FROM categories WHERE id::text = $${p.length} OR slug = $${p.length}
         UNION ALL SELECT c.id FROM categories c JOIN t ON c.parent_id = t.id) SELECT id FROM t)`);
   }
-  const sort = ({ new: 'created_at DESC', price_asc: 'price ASC', price_desc: 'price DESC', rating: 'avg_rating DESC NULLS LAST' } as any)[q.get('sort') || 'new'] || 'created_at DESC';
+  const mer = q.get('merchant'); if (mer && /^[0-9a-fA-F-]{36}$/.test(mer)) { p.push(mer); where.push('merchant_id::text = $' + p.length); } const sort = ({ new: 'created_at DESC', price_asc: 'price ASC', price_desc: 'price DESC', rating: 'avg_rating DESC NULLS LAST' } as any)[q.get('sort') || 'new'] || 'created_at DESC';
   const w = where.length ? 'WHERE ' + where.join(' AND ') : '';
   const total = Number((await c.db.query(`SELECT count(*) AS n FROM public_products ${w}`, p)).rows[0].n);
   p.push(limit, (page - 1) * limit);
