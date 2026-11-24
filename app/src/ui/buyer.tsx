@@ -44,6 +44,8 @@ const CAT_ICONS: Record<string, string> = { pharmacies: '💊', 'men-clothing': 
 export function Home() {
   const r = useFetch<any>('/public/home');
   return <Async r={r}>{d => <>
+    <AdBanner />
+
     <section className="hero"><h1>كل ما تحتاجه من تجار موثوقين</h1><p style={{ margin: 0 }}>اطلب بسهولة، وادفع عند الاستلام، وتابع طلبك حتى باب بيتك.</p></section>
     <h2>الأقسام</h2>
     <div className="cat-tiles">{d.categories.map((c: any) => <Link key={c.id} href={'/shop?category=' + c.slug} className="cat-tile"><span className="ico">{CAT_ICONS[c.slug] || '🛍️'}</span>{c.name_ar}</Link>)}</div>
